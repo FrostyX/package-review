@@ -1,0 +1,61 @@
+name: Build in Copr
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  hello:
+    runs-on: podman
+    container:
+      image: fedora:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show files
+        run: ls -la
+
+      - name: Show PR number
+        run: echo "${{ github.event.pull_request.number }}"
+
+      - name: Install dependencies
+        run: >-
+          dnf install -y
+          git
+          python
+          python3-rpkg
+          python3-copr
+          python3-ogr
+          python3-pydantic-settings
+
+      - name: Clone fedora-review-process-reimagined
+        run: git clone https://github.com/FrostyX/fedora-review-process-reimagined
+
+      - name: Create copr config
+        run: |
+          mkdir -p ~/.config
+          cat > ~/.config/copr <<EOF
+          [copr-cli]
+          username = ${COPR_USERNAME}
+          login = ${COPR_LOGIN}
+          token = ${COPR_TOKEN}
+          copr_url = ${COPR_URL}
+          EOF
+        env:
+          COPR_USERNAME: ${{ secrets.COPR_USERNAME }}
+          COPR_LOGIN: ${{ secrets.COPR_LOGIN }}
+          COPR_TOKEN: ${{ secrets.COPR_TOKEN }}
+          COPR_URL: ${{ secrets.COPR_URL }}
+
+      - name: Run review reimagined build in Copr
+        working-directory: fedora-review-process-reimagined
+        env:
+          FORGEJO_TOKEN: ${{ secrets.FORGEJO_TOKEN }}
+          FORGEJO_INSTANCE: ${{ secrets.FORGEJO_INSTANCE }}
+          PYTHONPATH: .
+        run: >-
+          python review_reimagined/review-reimagined-build-in-copr.py
+          --pull-request "${{ github.event.pull_request.number }}"
+          --force
