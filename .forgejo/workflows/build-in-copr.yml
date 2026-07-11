@@ -49,4 +49,4 @@ jobs:
         run: >-
           python review_reimagined/review-reimagined-build-in-copr.py
           --pull-request "${{ github.event.pull_request.number }}"
-          --force
+          ${{ github.event.forced && '--force' || '--no-force' }}

@@ -19,6 +19,11 @@ Run the action locally:
 ```
 act pull_request -W \
     .forgejo/workflows/build-in-copr.yml \
-    -e tests/data/pr-1.json \
+    -e tests/data/pr-1-open.json \
+    --secret-file .secrets
+
+act pull_request -W \
+    .forgejo/workflows/build-in-copr.yml \
+    -e tests/data/pr-1-force-push.json \
     --secret-file .secrets
 ```
