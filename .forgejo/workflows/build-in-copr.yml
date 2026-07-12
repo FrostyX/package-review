@@ -1,7 +1,6 @@
 name: Build in Copr
 
 on:
-  push:
   pull_request:
   workflow_dispatch:
 
