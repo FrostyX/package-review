@@ -5,8 +5,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  hello:
-    runs-on: podman
+  build-in-copr:
+    # For forge.fedoraproject.org, we will probably need to set
+    # runs-on: podman
+    runs-on: codeberg-medium
     container:
       image: fedora:latest
     steps:
@@ -42,8 +44,10 @@ jobs:
       - name: Run review reimagined build in Copr
         working-directory: fedora-review-process-reimagined
         env:
-          FORGEJO_TOKEN: ${{ secrets.FORGEJO_TOKEN }}
-          FORGEJO_INSTANCE: ${{ secrets.FORGEJO_INSTANCE }}
+          FORGE_INSTANCE: ${{ secrets.FORGE_INSTANCE }}
+          FORGE_TOKEN: ${{ secrets.FORGE_TOKEN }}
+          FORGE_NAMESPACE: ${{ secrets.FORGE_NAMESPACE }}
+          FORGE_REPO: ${{ secrets.FORGE_REPO }}
           PYTHONPATH: .
         run: >-
           python review_reimagined/review-reimagined-build-in-copr.py
