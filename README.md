@@ -62,6 +62,38 @@ one after each other. This is useful when packaging software and its
 dependencies.
 
 
+## Configuration
+
+Contributors can provide a configuration file to tweak the behavior of the
+review process. The configuration is done per-package, so for example,
+if we have `gh/gh.spec`, the respective configuration file would be
+`gh/gh.toml`.
+
+The configuration only serves the purposes of the review. Once that is done,
+it is no longer used (it is for example not committed to DistGit, etc).
+
+### Branches
+
+By default, the package is built in Copr for all currently stable Fedora
+versions, and a DistGit branch is requested for all those in which the package
+built successfully. You can override this with, e.g.
+
+```toml
+branches = ["f45", "f44"]
+```
+
+### Initial commit
+
+By default, a DistGit repository is automatically requested for every approved
+package. Once it is created, the package is automatically imported. This is not
+a desired behavior in some situations (e.g. renaming packages). If your workflow
+requires `fedpkg request-repo --no-initial-commit`, you can do:
+
+```toml
+initial_commit = false
+```
+
+
 ## Contribute
 
 If you want to improve the Package Review Process, see
