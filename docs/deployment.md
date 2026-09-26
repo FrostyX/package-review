@@ -18,3 +18,19 @@ FORGE_NAMESPACE
 FORGE_REPO
 FORGE_TOKEN
 ```
+
+Go to the Settings > Branches > Add new rule and configure this rule:
+
+```
+Protected branch name pattern:
+Never merge any packages
+
+Required approvals:
+1
+
+Restrict approvals to whitelisted users or teams:
+Checked
+
+Whitelisted reviewers:
+frostyx (and other maintainers of the repository)
+```
